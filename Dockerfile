@@ -9,7 +9,7 @@ RUN mvn clean package assembly:single -DskipTests
 # Package stage
 #
 FROM openjdk:17-jdk-slim
-COPY --from=build /target/javalin-deploy-1.0-SNAPSHOT-jar-with-dependencies.jar libros.jar
+COPY --from=build /target/ejercicio-1.0-SNAPSHOT-jar-with-dependencies.jar libros.jar
 # ENV PORT=8080
 EXPOSE 8080
 ENTRYPOINT ["java","-classpath","libros.jar","src/main/java/domain/server/App.java"]
