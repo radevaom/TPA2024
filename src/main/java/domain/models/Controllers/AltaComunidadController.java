@@ -17,19 +17,19 @@ import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import io.javalin.http.HandlerType;
 import io.javalin.http.HttpStatus;
+import javax.persistence.EntityManagerFactory;
 import org.jetbrains.annotations.NotNull;
-import org.uqbarproject.jpa.java8.extras.PerThreadEntityManagers;
+
 
 import javax.persistence.EntityManager;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class AltaComunidadController extends HandlerTP {
-  private RepoComunidad repoComunidad;
-
-  public AltaComunidadController( ){
-    super();
-    this.repoComunidad = new RepoComunidad();
+  private EntityManagerFactory entityManagerFactory;
+  public AltaComunidadController( EntityManagerFactory entityManagerFactory){
+    super(entityManagerFactory);
+    this.entityManagerFactory = entityManagerFactory;
   }
 
   @Override
@@ -53,7 +53,7 @@ public class AltaComunidadController extends HandlerTP {
     // Obtener el usuario en sesión
     Long userId = ctx.sessionAttribute("user_id");
 
-    EntityManager entity = PerThreadEntityManagers.getEntityManager();
+    EntityManager entity = entityManagerFactory.createEntityManager();
     //entity.getTransaction().begin();
 
     Usuario usuarioEnSesion = entity.find(Usuario.class, userId);

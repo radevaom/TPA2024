@@ -3,6 +3,7 @@ package domain.models.Controllers;
 import domain.Repositorios.RepoMiembro;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
+import javax.persistence.EntityManagerFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -12,8 +13,8 @@ public class UIListMiembroController extends HandlerTP {
 
 
   private RepoMiembro repoMiembro;
-  public UIListMiembroController(RepoMiembro repoMiembro) {
-    super();
+  public UIListMiembroController(RepoMiembro repoMiembro, EntityManagerFactory entityManagerFactory) {
+    super(entityManagerFactory);
     this.repoMiembro = repoMiembro;
   }
 

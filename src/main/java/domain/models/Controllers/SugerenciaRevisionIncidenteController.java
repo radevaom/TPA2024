@@ -11,6 +11,7 @@ import domain.models.entities.usuario.Usuario;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import io.javalin.http.HandlerType;
+import javax.persistence.EntityManagerFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -19,11 +20,11 @@ import java.util.Map;
 
 public class SugerenciaRevisionIncidenteController extends HandlerTP {
 
-  private RepoIncidente repoIncidente;
+  private EntityManagerFactory entityManagerFactory;
 
-  public SugerenciaRevisionIncidenteController(RepoIncidente repoIncidente){
-    super();
-    this.repoIncidente = repoIncidente;
+  public SugerenciaRevisionIncidenteController(EntityManagerFactory entityManagerFactory){
+    super(entityManagerFactory);
+    this.entityManagerFactory = entityManagerFactory;
   }
 
 

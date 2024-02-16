@@ -5,6 +5,8 @@ import domain.Repositorios.RepoMiembro;
 import domain.models.entities.miembro.Miembro;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;

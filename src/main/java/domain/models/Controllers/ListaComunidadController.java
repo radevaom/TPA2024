@@ -7,8 +7,9 @@ import domain.models.entities.usuario.Persona;
 import domain.models.entities.usuario.TipoUsuario;
 import domain.models.entities.usuario.Usuario;
 import io.javalin.http.Context;
+import javax.persistence.EntityManagerFactory;
 import org.jetbrains.annotations.NotNull;
-import org.uqbarproject.jpa.java8.extras.PerThreadEntityManagers;
+
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
@@ -18,11 +19,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ListaComunidadController extends HandlerTP {
-  private RepoComunidad repoComunidad;
+  private EntityManagerFactory entityManagerFactory;
 
-  public ListaComunidadController(RepoComunidad repoComunidad) {
-    super();
-    this.repoComunidad = repoComunidad;
+  public ListaComunidadController(EntityManagerFactory entityManagerFactory){
+    super(entityManagerFactory);
+    this.entityManagerFactory = entityManagerFactory;
   }
 
 //  @Override
@@ -50,7 +51,7 @@ public class ListaComunidadController extends HandlerTP {
 
     // Obtener el usuario en sesión
     Long userId = ctx.sessionAttribute("user_id");
-    EntityManager entity = PerThreadEntityManagers.getEntityManager();
+    EntityManager entity = entityManagerFactory.createEntityManager();
     Usuario usuarioEnSesion = null;
     if (userId != null) {
       usuarioEnSesion = entity.find(Usuario.class, userId);
@@ -111,7 +112,7 @@ public class ListaComunidadController extends HandlerTP {
   private Usuario obtenerUsuarioEnSesion(Context ctx) {
     Long userId = ctx.sessionAttribute("user_id");
     if (userId != null) {
-      EntityManager entity = PerThreadEntityManagers.getEntityManager();
+      EntityManager entity = entityManagerFactory.createEntityManager();
       try {
         return entity.find(Usuario.class, userId);
       } finally {

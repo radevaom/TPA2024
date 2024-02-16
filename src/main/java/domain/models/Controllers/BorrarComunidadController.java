@@ -4,14 +4,15 @@ import domain.Repositorios.RepoComunidad;
 import domain.models.entities.comunidad.Comunidad;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
+import javax.persistence.EntityManagerFactory;
 import org.jetbrains.annotations.NotNull;
 
 public class BorrarComunidadController implements Handler {
-  private RepoComunidad repoComunidad;
+  private EntityManagerFactory entityManagerFactory;
 
-  public BorrarComunidadController(RepoComunidad repoComunidad){
+  public BorrarComunidadController(EntityManagerFactory entityManagerFactory){
     super();
-    this.repoComunidad = repoComunidad;
+    this.entityManagerFactory = entityManagerFactory;
   }
   @Override
   public void handle(@NotNull Context ctx) throws Exception {

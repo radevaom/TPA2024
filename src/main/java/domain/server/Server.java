@@ -9,6 +9,7 @@ import io.javalin.rendering.JavalinRenderer;
 
 import java.io.IOException;
 import java.util.function.Consumer;
+import javax.persistence.EntityManagerFactory;
 
 public class Server {
   private static Javalin app = null;

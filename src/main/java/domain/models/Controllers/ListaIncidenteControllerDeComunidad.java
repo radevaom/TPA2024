@@ -5,8 +5,9 @@ import domain.models.entities.incidente.Incidente;
 import domain.models.entities.miembro.Miembro;
 import domain.models.entities.usuario.Usuario;
 import io.javalin.http.Context;
+import javax.persistence.EntityManagerFactory;
 import org.jetbrains.annotations.NotNull;
-import org.uqbarproject.jpa.java8.extras.PerThreadEntityManagers;
+
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
@@ -14,9 +15,10 @@ import java.util.List;
 import java.util.Map;
 
 public class ListaIncidenteControllerDeComunidad extends HandlerTP {
-
-  public ListaIncidenteControllerDeComunidad() {
-    super();
+  private EntityManagerFactory entityManagerFactory;
+  public ListaIncidenteControllerDeComunidad(EntityManagerFactory entityManagerFactory) {
+    super(entityManagerFactory);
+    this.entityManagerFactory = entityManagerFactory;
   }
 
   @Override
@@ -26,7 +28,7 @@ public class ListaIncidenteControllerDeComunidad extends HandlerTP {
 
     Map<String, Object> model = inicializarModelo(ctx);
     //    ctx.json(repoIncidente.all());
-    EntityManager entity = PerThreadEntityManagers.getEntityManager();
+    EntityManager entity = entityManagerFactory.createEntityManager();
 
     entity.getTransaction().begin();
 
@@ -56,7 +58,7 @@ public class ListaIncidenteControllerDeComunidad extends HandlerTP {
 
     Long userId = ctx.sessionAttribute("user_id");
 
-    EntityManager entity = PerThreadEntityManagers.getEntityManager();
+    EntityManager entity = entityManagerFactory.createEntityManager();
     Usuario usuarioEnSesion = entity.find(Usuario.class, userId);
 
     List<Comunidad> comunidades = obtenerComunidades(usuarioEnSesion.getTipoUsuario().getMiembros());

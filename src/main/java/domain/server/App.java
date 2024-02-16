@@ -19,25 +19,86 @@ import domain.models.entities.serviciospublicos.establecimiento.Estacion;
 
 import domain.models.entities.usuario.*;
 
+import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import org.uqbarproject.jpa.java8.extras.EntityManagerOps;
-import org.uqbarproject.jpa.java8.extras.WithGlobalEntityManager;
-import org.uqbarproject.jpa.java8.extras.transaction.TransactionalOps;
+import java.util.Map;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
-public class App implements WithGlobalEntityManager, EntityManagerOps, TransactionalOps {
+public class App {
+  public static EntityManagerFactory entityManagerFactory;
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws Exception {
+    entityManagerFactory =  createEntityManagerFactory();
+
     new App().run();
     Server.init();
 
+
+
+
+
+
+
+  }
+  public static EntityManagerFactory createEntityManagerFactory() throws Exception {
+    // https://stackoverflow.com/questions/8836834/read-environment-variables-in-persistence-xml-file
+    Map<String, String> env = System.getenv();
+    Map<String, Object> configOverrides = new HashMap<String, Object>();
+
+    String[] keys = new String[] {
+        "DATABASE_URL",
+        "javax__persistence__jdbc__driver",
+        "javax__persistence__jdbc__password",
+        "javax__persistence__jdbc__url",
+        "javax__persistence__jdbc__user",
+        "hibernate__hbm2ddl__auto",
+        "hibernate__connection__pool_size",
+        "hibernate__show_sql" };
+
+    for (String key : keys) {
+
+      try{
+        if (key.equals("DATABASE_URL")) {
+
+          // https://devcenter.heroku.com/articles/connecting-heroku-postgres#connecting-in-java
+          String value = env.get(key);
+          URI dbUri = new URI(value);
+          String username = dbUri.getUserInfo().split(":")[0];
+          String password = dbUri.getUserInfo().split(":")[1];
+          //javax.persistence.jdbc.url=jdbc:postgresql://localhost/dblibros
+          value = "jdbc:mysql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();// + "?sslmode=require";
+          configOverrides.put("javax.persistence.jdbc.url", value);
+          configOverrides.put("javax.persistence.jdbc.user", username);
+          configOverrides.put("javax.persistence.jdbc.password", password);
+          configOverrides.put("javax.persistence.jdbc.driver", "com.mysql.jdbc.Driver");
+
+          //  configOverrides.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+        }
+        // no se pueden poner variables de entorno con "." en la key
+        String key2 = key.replace("__",".");
+        if (env.containsKey(key)) {
+          String value = env.get(key);
+          configOverrides.put(key2, value);
+        }
+      } catch(Exception ex){
+        System.out.println("Error configurando " + key);
+      }
+    }
+    System.out.println("Config overrides ----------------------");
+    for (String key : configOverrides.keySet()) {
+      System.out.println(key + ": " + configOverrides.get(key));
+    }
+    return Persistence.createEntityManagerFactory("db", configOverrides);
   }
 
-
   public void run() {
-    withTransaction(() -> {
+    EntityManager entity = entityManagerFactory.createEntityManager();
 
       Centroide centroideCaba = new Centroide(-34.6144,-58.4458);
       Centroide centroideBsas = new Centroide(-36.6773,-60.5584);
@@ -177,65 +238,67 @@ public class App implements WithGlobalEntityManager, EntityManagerOps, Transacti
 
       Administrador personaAdministrador = new Administrador();
       Usuario administrador = new Usuario("admin", "admin", personaAdministrador);
+      entity.getTransaction().begin();
 
-      persist(personaAdministrador);
-      persist(administrador);
+      entity.persist(personaAdministrador);
+      entity.persist(administrador);
 
-      persist(centroideCaba);
-      persist(centroideBsas);
-      persist(centroideMoron);
+      entity.persist(centroideCaba);
+      entity.persist(centroideBsas);
+      entity.persist(centroideMoron);
 
-      persist(centroide1);
-      persist(centroide2);
-      persist(centroide3);
-      persist(centroide4);
+      entity.persist(centroide1);
+      entity.persist(centroide2);
+      entity.persist(centroide3);
+      entity.persist(centroide4);
 
-      persist(municipio1);
-      persist(moron);
-      persist(servicio1);
-      persist(servicio2);
-      persist(servicio3);
-      persist(servicio4);
-      persist(servicio5);
-      persist(estacion1);
-      persist(estacionMoron);
+      entity.persist(municipio1);
+      entity.persist(moron);
+      entity.persist(servicio1);
+      entity.persist(servicio2);
+      entity.persist(servicio3);
+      entity.persist(servicio4);
+      entity.persist(servicio5);
+      entity.persist(estacion1);
+      entity.persist(estacionMoron);
 
 
-      persist(comunidad1);
-      persist(comunidad2);
-      persist(comunidad3);
-      persist(comunidad4);
-      persist(comunidad5);
-      persist(comunidad6);
+      entity.persist(comunidad1);
+      entity.persist(comunidad2);
+      entity.persist(comunidad3);
+      entity.persist(comunidad4);
+      entity.persist(comunidad5);
+      entity.persist(comunidad6);
 
-      persist(miembroNormal1);
-      persist(miembroNormal2);
-      persist(miembroNormal3);
-      persist(miembroNormal4);
-      persist(miembroNormal5);
-      persist(miembroNormal6);
+      entity.persist(miembroNormal1);
+      entity.persist(miembroNormal2);
+      entity.persist(miembroNormal3);
+      entity.persist(miembroNormal4);
+      entity.persist(miembroNormal5);
+      entity.persist(miembroNormal6);
 
       incidente4.setCierre(LocalDateTime.of(2024, 2, 15, 0, 0));
-      persist(incidente4);
-      persist(incidente1);
-      persist(incidente2);
-      persist(incidente3);
-      persist(incidente5);
+      entity.persist(incidente4);
+      entity.persist(incidente1);
+      entity.persist(incidente2);
+      entity.persist(incidente3);
+      entity.persist(incidente5);
 
-      persist(caba);
-      persist(subteB);
+      entity.persist(caba);
+      entity.persist(subteB);
 
-      persist(alertaCuandoSucede);
-      persist(alertaSinApuro);
-      persist(persona1);
-      persist(usu1);
-      persist(persona2);
-      persist(persona3);
-      persist(usu2);
-      persist(usu3);
-      persist(grupo17SA);
-      persist(organismoDeControl);
+      entity.persist(alertaCuandoSucede);
+      entity.persist(alertaSinApuro);
+      entity.persist(persona1);
+      entity.persist(usu1);
+      entity.persist(persona2);
+      entity.persist(persona3);
+      entity.persist(usu2);
+      entity.persist(usu3);
+      entity.persist(grupo17SA);
+      entity.persist(organismoDeControl);
 
-    });
+      entity.getTransaction().commit();
+      entity.close();
   }
 }

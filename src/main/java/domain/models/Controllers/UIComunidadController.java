@@ -7,8 +7,8 @@ import domain.models.entities.miembro.MiembroNormal;
 import domain.models.entities.usuario.Persona;
 import domain.models.entities.usuario.Usuario;
 import io.javalin.http.Context;
+import javax.persistence.EntityManagerFactory;
 import org.jetbrains.annotations.NotNull;
-import org.uqbarproject.jpa.java8.extras.PerThreadEntityManagers;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
@@ -16,15 +16,18 @@ import java.util.List;
 import java.util.Map;
 
 public class UIComunidadController extends HandlerTP {
-  public UIComunidadController(RepoComunidad repoComunidad) {
 
+  private EntityManagerFactory entityManagerFactory;
+  public UIComunidadController(EntityManagerFactory entityManagerFactory) {
+    super(entityManagerFactory);
+    this.entityManagerFactory = entityManagerFactory;
   }
 
   @Override
   public void handle(@NotNull Context ctx) throws Exception {
     Map<String, Object> model = inicializarModelo(ctx);
 
-    EntityManager entity = PerThreadEntityManagers.getEntityManager();
+    EntityManager entity = entityManagerFactory.createEntityManager();
 
     Comunidad comunidad = obtenerComunidadDesdeRepositorio(ctx, entity);
     model.put("comunidad", comunidad);
@@ -111,7 +114,7 @@ public class UIComunidadController extends HandlerTP {
   }
 
   public void unirmeComunidad(Context context) {
-    EntityManager entity = PerThreadEntityManagers.getEntityManager();
+    EntityManager entity = entityManagerFactory.createEntityManager();
 
 
     Comunidad comunidad = obtenerComunidadNoPertence(context, entity);
@@ -148,7 +151,7 @@ public class UIComunidadController extends HandlerTP {
   }
 
   public void salirComunidad(Context context) {
-    EntityManager entity = PerThreadEntityManagers.getEntityManager();
+    EntityManager entity = entityManagerFactory.createEntityManager();
 
     Comunidad comunidad = obtenerComunidadNoPertence(context, entity);
 

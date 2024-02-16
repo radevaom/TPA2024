@@ -4,14 +4,21 @@ import domain.models.entities.usuario.Administrador;
 import domain.models.entities.usuario.Usuario;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
+import javax.persistence.EntityManagerFactory;
 import org.jetbrains.annotations.NotNull;
-import org.uqbarproject.jpa.java8.extras.PerThreadEntityManagers;
+
 
 import javax.persistence.EntityManager;
 import java.util.HashMap;
 import java.util.Map;
 
 public abstract class HandlerTP implements Handler {
+
+  private EntityManagerFactory entityManagerFactory;
+
+  public HandlerTP(EntityManagerFactory entityManagerFactory) {
+    this.entityManagerFactory = entityManagerFactory;
+  }
 
   @Override
   public void handle(@NotNull Context ctx) throws Exception {
@@ -33,7 +40,7 @@ public abstract class HandlerTP implements Handler {
   }
 
   public Usuario getUsuario(Context context) {
-    EntityManager entity = PerThreadEntityManagers.getEntityManager();
+    EntityManager entity = entityManagerFactory.createEntityManager();
 
     entity.getTransaction().begin();
 

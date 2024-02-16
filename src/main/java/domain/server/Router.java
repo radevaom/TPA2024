@@ -1,37 +1,52 @@
 package domain.server;
 
 
+import static domain.server.App.createEntityManagerFactory;
+import static domain.server.App.entityManagerFactory;
+
 import domain.Repositorios.*;
 import domain.models.Controllers.*;
 import io.javalin.http.HttpStatus;
-import org.uqbarproject.jpa.java8.extras.PerThreadEntityManagers;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+
 
 public class Router {
-
   public static void init() {
     Router.configure();
+
   }
 
-
-  static RepoComunidad repoComunidad = new RepoComunidad();
   static RepoMiembro repoMiembro = new RepoMiembro();
-  static RepoUsuario repoUsuario = new RepoUsuario();
 
-  static RepoIncidente repoIncidente = new RepoIncidente();
+  static SesionController sesionController = new SesionController(entityManagerFactory);
 
-  static RepoRanking repoRanking = new RepoRanking();
+  static UIComunidadController uiComunidadController = new UIComunidadController(entityManagerFactory);
+  static RegistroController registroController = new RegistroController(entityManagerFactory);
 
-  static RepoEntidadesPrestadoras repoEntidadesPrestadoras = new RepoEntidadesPrestadoras();
-  static RepoOrganismosDeControl repoOrganismosDeControl = new RepoOrganismosDeControl();
+  static AltaComunidadController altaComunidadController = new AltaComunidadController(entityManagerFactory);
 
-  static SesionController sesionController = new SesionController();
+  static ListaRankingIncidenteController listaRankingIncidenteController = new ListaRankingIncidenteController(entityManagerFactory);
 
-  static UIComunidadController uiComunidadController = new UIComunidadController(repoComunidad);
-  static RegistroController registroController = new RegistroController();
+  static AltaIncidenteController altaIncidenteController = new AltaIncidenteController(entityManagerFactory);
 
-  static AltaComunidadController altaComunidadController = new AltaComunidadController();
+  static CierreIncidenteController cierreIncidenteController = new CierreIncidenteController(entityManagerFactory);
 
-  static ListaRankingIncidenteController listaRankingIncidenteController = new ListaRankingIncidenteController();
+  static ListaIncidenteController listaIncidenteController = new ListaIncidenteController(entityManagerFactory);
+
+  static SugerenciaRevisionIncidenteController sugerenciaRevisionIncidenteController = new SugerenciaRevisionIncidenteController(entityManagerFactory);
+
+  static ListaComunidadController listaComunidadController = new ListaComunidadController(entityManagerFactory);
+
+  static BorrarComunidadController borrarComunidadController = new BorrarComunidadController(entityManagerFactory);
+
+  static CargaMasivaController cargaMasivaController = new CargaMasivaController(entityManagerFactory);
+
+  static ListaIncidenteControllerDeComunidad listaIncidenteControllerDeComunidad = new ListaIncidenteControllerDeComunidad(entityManagerFactory);
+
+  static HomeController homeController = new HomeController(entityManagerFactory);
+
+  static UIMiembroController uiMiembroController = new UIMiembroController(repoMiembro);
   private static void configure() {
 
     Server.app().before(ctx -> {
@@ -50,48 +65,48 @@ public class Router {
     // TODO CARGA MASIVA DE DATOS - TENDRIAMOS QUE CREAR UNA PANTALLA ESPECFICA PARA CARGAR ARCHIVOS Y EL SISTEMA, A PARTIR DE UN
     // CSV CREA LAS ENTIDADES PRESTADORAS Y LOS ORGANISMOS DE CONTROL CON LA CLASE CSVLOADER
 
-    Server.app().get("/cargaMasiva", new CargaMasivaController());
-    Server.app().post("/cargaMasiva", new CargaMasivaController());
+    Server.app().get("/cargaMasiva", cargaMasivaController);
+    Server.app().post("/cargaMasiva", cargaMasivaController);
 
-    Server.app().post("/incidente", new AltaIncidenteController(repoIncidente));
+    Server.app().post("/incidente", altaIncidenteController);
 
-    Server.app().post("/incidentes/{incidenteId}/cierre", new CierreIncidenteController(repoIncidente));
-    Server.app().get("/incidentes/cierre", new CierreIncidenteController(repoIncidente));
+    Server.app().post("/incidentes/{incidenteId}/cierre", cierreIncidenteController);
+    Server.app().get("/incidentes/cierre", cierreIncidenteController);
 
-    Server.app().get("/incidentes", new ListaIncidenteController(repoIncidente));
-    Server.app().get("/incidentes/nuevo", new AltaIncidenteController(repoIncidente));
+    Server.app().get("/incidentes", listaIncidenteController);
+    Server.app().get("/incidentes/nuevo", altaIncidenteController);
 
    // Server.app().get("/incidentes/{incidenteId}", new UIIncidenteController(repoIncidente));
 
-    Server.app().get("/incidentes/sugerenciaRevision/{incidenteId}", new SugerenciaRevisionIncidenteController(repoIncidente));
-    Server.app().get("/incidentes/sugerenciaRevision", new SugerenciaRevisionIncidenteController(repoIncidente));
-    Server.app().post("/incidentes/sugerenciaRevision", new SugerenciaRevisionIncidenteController(repoIncidente));
+    Server.app().get("/incidentes/sugerenciaRevision/{incidenteId}", sugerenciaRevisionIncidenteController);
+    Server.app().get("/incidentes/sugerenciaRevision", sugerenciaRevisionIncidenteController);
+    Server.app().post("/incidentes/sugerenciaRevision", sugerenciaRevisionIncidenteController);
 
     Server.app().get("/incidentes/ranking", listaRankingIncidenteController);
 
 
 
 
-    Server.app().get("/home", new HomeController());
+    Server.app().get("/home", homeController);
 
     //Server.app().post("/comunidades", new AltaComunidadController(repoComunidad));
 
-    Server.app().get("/comunidades", new ListaComunidadController(repoComunidad));
+    Server.app().get("/comunidades", listaComunidadController);
 
-    Server.app().delete("/comunidades/{comunidadId}", new BorrarComunidadController(repoComunidad));
+    Server.app().delete("/comunidades/{comunidadId}", borrarComunidadController);
 
-    Server.app().get("/comunidades/{comunidadId}", new UIComunidadController(repoComunidad));
+    Server.app().get("/comunidades/{comunidadId}", uiComunidadController);
 
     Server.app().get("/unirmeComunidad/{comunidadId}", uiComunidadController::unirmeComunidad);
 
     Server.app().get("/salirComunidad/{comunidadId}", uiComunidadController::salirComunidad);
 
-    Server.app().get("/incidentesDeComunidad/{comunidadId}", new ListaIncidenteControllerDeComunidad());
+    Server.app().get("/incidentesDeComunidad/{comunidadId}", listaIncidenteControllerDeComunidad);
 
 
-    Server.app().get("/miembros/{miembroId}", new UIMiembroController(repoMiembro));
+    Server.app().get("/miembros/{miembroId}", uiMiembroController);
 
-    Server.app().get("/miembros", new UIListMiembroController(repoMiembro));
+    Server.app().get("/miembros", uiMiembroController);
 
     Server.app().get("/registro", registroController);
     Server.app().post("/registro", registroController);
@@ -102,7 +117,8 @@ public class Router {
 
 
     Server.app().after(ctx -> {
-      PerThreadEntityManagers.getEntityManager().clear();
+      EntityManager entity = entityManagerFactory.createEntityManager();
+      entity.clear();
     });
   }
 }

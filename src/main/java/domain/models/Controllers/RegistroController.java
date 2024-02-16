@@ -12,10 +12,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import org.jetbrains.annotations.NotNull;
-import org.uqbarproject.jpa.java8.extras.PerThreadEntityManagers;
+
 
 public class RegistroController extends HandlerTP {
+  private EntityManagerFactory entityManagerFactory;
+
+  public RegistroController(EntityManagerFactory entityManagerFactory) {
+    super(entityManagerFactory);
+    this.entityManagerFactory = entityManagerFactory;
+  }
 
   @Override
   public void handle(@NotNull Context ctx) throws Exception {
@@ -42,7 +49,7 @@ public class RegistroController extends HandlerTP {
 
     if (Objects.equals(ctx.formParam("tipoUsu"), "Persona")) {
 
-      EntityManager entity = PerThreadEntityManagers.getEntityManager();
+      EntityManager entity = entityManagerFactory.createEntityManager();
       entity.getTransaction().begin();
 
       TipoAlerta alerta = entity.createQuery("select a from TipoAlerta a where a.id = :id", TipoAlerta.class)

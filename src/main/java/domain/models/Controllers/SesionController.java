@@ -6,15 +6,19 @@ import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import io.javalin.http.HandlerType;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.uqbarproject.jpa.java8.extras.PerThreadEntityManagers;
+
 
 public class SesionController extends HandlerTP {
+  private EntityManagerFactory entityManagerFactory;
 
-  public SesionController() {
+  public SesionController(EntityManagerFactory entityManagerFactory) {
+    super(entityManagerFactory);
+    this.entityManagerFactory = entityManagerFactory;
   }
 
   public void mostrarLogin(@NotNull Context ctx) {
@@ -26,7 +30,7 @@ public class SesionController extends HandlerTP {
   }
   public void iniciarSesion(@NotNull Context ctx) {
 
-    EntityManager entity = PerThreadEntityManagers.getEntityManager();
+    EntityManager entity = entityManagerFactory.createEntityManager();
 
     try {
       Usuario usuario = entity.createQuery(

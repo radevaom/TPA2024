@@ -9,18 +9,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Handler;
+import javax.persistence.EntityManagerFactory;
 import org.jetbrains.annotations.NotNull;
-import org.uqbarproject.jpa.java8.extras.PerThreadEntityManagers;
+
 
 import javax.persistence.EntityManager;
 
 public class ListaIncidenteController extends HandlerTP {
 
-  private RepoIncidente repoIncidente;
+  private EntityManagerFactory entityManagerFactory;
 
-  public ListaIncidenteController(RepoIncidente repoIncidente) {
-    super();
-    this.repoIncidente = repoIncidente;
+  public ListaIncidenteController(EntityManagerFactory entityManagerFactory){
+    super(entityManagerFactory);
+    this.entityManagerFactory = entityManagerFactory;
   }
 
   @Override
@@ -30,7 +31,7 @@ public class ListaIncidenteController extends HandlerTP {
 
     Map<String, Object> model = inicializarModelo(ctx);
     //    ctx.json(repoIncidente.all());
-    EntityManager entity = PerThreadEntityManagers.getEntityManager();
+    EntityManager entity = entityManagerFactory.createEntityManager();
 
     entity.getTransaction().begin();
 

@@ -8,8 +8,9 @@ import domain.models.entities.usuario.Usuario;
 import io.javalin.http.Context;
 import io.javalin.http.HandlerType;
 import io.javalin.http.HttpStatus;
+import javax.persistence.EntityManagerFactory;
 import org.jetbrains.annotations.NotNull;
-import org.uqbarproject.jpa.java8.extras.PerThreadEntityManagers;
+
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
@@ -19,13 +20,12 @@ import java.util.Map;
 
 public class CierreIncidenteController extends HandlerTP {
 
-  private RepoIncidente repoIncidente;
+  private EntityManagerFactory entityManagerFactory;
 
-  public CierreIncidenteController(RepoIncidente repoIncidente){
-    super();
-    this.repoIncidente = repoIncidente;
+  public CierreIncidenteController(EntityManagerFactory entityManagerFactory){
+    super(entityManagerFactory);
+    this.entityManagerFactory = entityManagerFactory;
   }
-
 
   @Override
   public void handle(@NotNull Context ctx) throws Exception {
@@ -45,7 +45,7 @@ public class CierreIncidenteController extends HandlerTP {
     Map<String, Object> model = inicializarModelo(context);
 
     if (context.sessionAttribute("user_id") != null) {
-      EntityManager entity = PerThreadEntityManagers.getEntityManager();
+      EntityManager entity = entityManagerFactory.createEntityManager();
 
       entity.getTransaction().begin();
 
@@ -71,7 +71,7 @@ public class CierreIncidenteController extends HandlerTP {
 
   public void handlePostRequest(Context context) {
     Map<String, Object> model = inicializarModelo(context);
-    EntityManager entity = PerThreadEntityManagers.getEntityManager();
+    EntityManager entity = entityManagerFactory.createEntityManager();
 
     entity.getTransaction().begin();
 

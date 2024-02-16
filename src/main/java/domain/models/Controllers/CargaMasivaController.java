@@ -12,17 +12,19 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import javax.persistence.EntityManagerFactory;
 import org.jetbrains.annotations.NotNull;
-import org.uqbarproject.jpa.java8.extras.PerThreadEntityManagers;
+
 
 import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Map;
 
 public class CargaMasivaController extends HandlerTP {
-
-  public CargaMasivaController() {
-
+  private EntityManagerFactory entityManagerFactory;
+  public CargaMasivaController(EntityManagerFactory entityManagerFactory) {
+    super(entityManagerFactory);
+    this.entityManagerFactory = entityManagerFactory;
   }
 
   @Override
@@ -41,7 +43,7 @@ public class CargaMasivaController extends HandlerTP {
     List<EntidadPrestadoraServicioPublico> entidadPrestadoraServicioPublicos = csvLoader.cargarCSVEntidadPrestadoraFebrero(rutaArchivo);
 
 
-    EntityManager entity = PerThreadEntityManagers.getEntityManager();
+    EntityManager entity = entityManagerFactory.createEntityManager();
     entity.getTransaction().begin();
     entidadPrestadoraServicioPublicos.forEach(entidad -> entity.persist(entidad));
     entity.getTransaction().commit();

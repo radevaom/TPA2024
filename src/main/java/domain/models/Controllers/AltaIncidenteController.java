@@ -13,8 +13,8 @@ import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import io.javalin.http.HandlerType;
 import io.javalin.http.HttpStatus;
+import javax.persistence.EntityManagerFactory;
 import org.jetbrains.annotations.NotNull;
-import org.uqbarproject.jpa.java8.extras.PerThreadEntityManagers;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -23,11 +23,11 @@ import java.util.stream.Collectors;
 
 public class AltaIncidenteController extends HandlerTP {
 
-  private RepoIncidente repoIncidente;
+  private EntityManagerFactory entityManagerFactory;
 
-  public AltaIncidenteController(RepoIncidente repoIncidente){
-    super();
-    this.repoIncidente = repoIncidente;
+  public AltaIncidenteController(EntityManagerFactory entityManagerFactory){
+    super(entityManagerFactory);
+    this.entityManagerFactory = entityManagerFactory;
   }
 
   @Override
@@ -44,7 +44,7 @@ public class AltaIncidenteController extends HandlerTP {
     Map<String, Object> model = inicializarModelo(context);
 
     if (context.sessionAttribute("user_id") != null) {
-      EntityManager entity = PerThreadEntityManagers.getEntityManager();
+      EntityManager entity = entityManagerFactory.createEntityManager();
 
       entity.getTransaction().begin();
 
@@ -70,7 +70,7 @@ public class AltaIncidenteController extends HandlerTP {
 
   public void handlePostRequest(Context context) {
 
-    EntityManager entity = PerThreadEntityManagers.getEntityManager();
+    EntityManager entity = entityManagerFactory.createEntityManager();
 
     entity.getTransaction().begin();
 

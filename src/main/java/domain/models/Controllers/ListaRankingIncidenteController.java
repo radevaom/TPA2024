@@ -1,6 +1,5 @@
 package domain.models.Controllers;
 
-import com.google.gson.JsonArray;
 import domain.Repositorios.RepoRanking;
 import domain.models.entities.comunidad.Comunidad;
 import domain.models.entities.incidente.Incidente;
@@ -15,14 +14,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import org.jetbrains.annotations.NotNull;
-import org.uqbarproject.jpa.java8.extras.PerThreadEntityManagers;
+
 
 public class ListaRankingIncidenteController extends HandlerTP {
 
-  private RepoRanking repoRanking;
+  private EntityManagerFactory entityManagerFactory;
 
-  public ListaRankingIncidenteController() {
+  public ListaRankingIncidenteController(EntityManagerFactory entityManagerFactory) {
+    super(entityManagerFactory);
+    this.entityManagerFactory = entityManagerFactory;
   }
 
   @Override
@@ -30,7 +32,7 @@ public class ListaRankingIncidenteController extends HandlerTP {
     super.handle(ctx);
     Map<String, Object> model = inicializarModelo(ctx);
 
-    EntityManager entity = PerThreadEntityManagers.getEntityManager();
+    EntityManager entity = entityManagerFactory.createEntityManager();
 
     List<Comunidad> comunidad = entity.createQuery("select C from Comunidad C",
         Comunidad.class).getResultList();
