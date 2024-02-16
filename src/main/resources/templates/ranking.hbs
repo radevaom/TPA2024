@@ -1,0 +1,32 @@
+{{#partial "titulo"}}Ranking{{/partial}}
+{{#partial "principal"}}
+
+<html>
+<head>
+<meta charset = "UTF-8">
+</head>
+
+    <body>
+        <div class="col-md-6 background-opacity">
+            <table>
+                <tr>
+                    <th>Grupo</th>
+                    <th>Puntaje</th>
+                </tr>
+                    <tr>
+                    {{#each grupos}}
+                        <td>{{this}}</td>
+                    {{/each}}
+
+                    {{#each puntajes}}
+                        <td>{{this}}</td>
+                    {{/each}}
+                    </tr>
+
+            </table>
+        </div>
+    </body>
+</html>
+
+{{/partial}}
+{{>templates/layout.html}}

@@ -1,0 +1,38 @@
+{{#partial "titulo"}}Comunidad{{/partial}}
+{{#partial "principal"}}
+
+<html>
+<head>
+<meta charset = "UTF-8">
+</head>
+
+    <body>
+        <div class="col-md-6 background-opacity">
+            <table>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Incidentes</th>
+                </tr>
+
+                <tr>
+                    <td>{{#if comunidad.nombre}}{{comunidad.nombre}}{{else}}{{comunidadNoPertence.nombre}}{{/if}}</td>
+                    <td>
+                        <button class="btn btn-primary" onclick="verDetalles('{{#if comunidad.id}}{{comunidad.id}}{{else}}{{comunidadNoPertence.id}}{{/if}}')">
+                            Ver Incidentes
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </body>
+
+    <script>
+        function verDetalles(id) {
+            // Redirige a la página de detalles con el ID de la comunidad
+            window.location.href = '/incidentesDeComunidad/' + id;
+        }
+    </script>
+</html>
+
+{{/partial}}
+{{>templates/layout.html}}

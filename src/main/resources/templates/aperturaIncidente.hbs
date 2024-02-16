@@ -1,0 +1,59 @@
+{{#partial "titulo"}}Apertura Incidente{{/partial}}
+{{#partial "principal"}}
+
+<html>
+    <head>
+        <meta charset = "UTF-8">
+    </head>
+
+    <body>
+    <div class="col-md-6 background-opacity">
+
+        <form id="incidentForm" method="post" action="/incidente">
+            <h2 class="mb-4">Nuevo incidente</h2>
+
+            <div class="form-group">
+                <label for="newIncidente">Usuario</label>
+                <input type="text" class="form-control" id="usuario-shown" value={{usuario.username}} disabled required>
+                <input type="hidden" class="form-control" id="usuario" name="usuario" value={{usuario.id}} required>
+            </div>
+
+            <br>
+
+            <div class="form-group">
+                <label for="newIncidente">Comunidad</label>
+                <select class="form-control" id="comunidad" name="comunidad">
+                                    {{#each comunidades}}
+                                        <option value="{{this.id}}">{{this.nombre}}</option>
+                                    {{/each}}
+                                </select>
+            </div>
+            <br>
+
+            <div class="form-group">
+                <label for="newIncidente">Servicio</label>
+                <select class="form-control" id="servicio" name="servicio">
+                    {{#each servicios}}
+                        <option value="{{this.id}}">{{this.nombre}}</option>
+                    {{/each}}
+                </select>
+            </div>
+
+            <br>
+
+            <div class="form-group">
+                <label for="newIncidente">Observaciones</label>
+                <input type="textarea" class="form-control" id="observaciones" name="observaciones" required>
+            </div>
+
+            <button type="submit" class="btn btn-success">Ingresar</button>
+
+        </form>
+
+    </div>
+    </body>
+</html>
+
+
+{{/partial}}
+{{>templates/layout.html}}

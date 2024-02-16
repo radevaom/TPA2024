@@ -1,0 +1,113 @@
+{{#partial "titulo"}}Listado de Comunidades{{/partial}}
+{{#partial "principal"}}
+
+<html>
+    <head>
+        <meta charset = "UTF-8">
+    </head>
+
+    <body>
+        <div class="left-width">
+            <div class="col-md-6 background-opacity">
+                <h1>Buscar Comunidades</h1>
+                <label for="search">Search:</label>
+                <input type="text" id="search" oninput="searchTable()" placeholder="Enter keyword">
+                <h3> </h3>
+                    <table id="communityTable">
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Unirme a Comunidad</th>
+                        </tr>
+                        {{#each comunidades}}
+                            <tr>
+                                <td>{{nombre}}</td>
+                                <td>
+                                    <button class="btn btn-primary" onclick="unirmeComunidad('{{id}}')">Unirme</button>
+                                </td>
+                            </tr>
+                        {{/each}}
+                    </table>
+                <ul class="navbar-nav mr-auto" style="margin-left: 30px;">
+                    <li class="nav-item"><a class="nav-link" href="/crearComunidad">Crear una nueva Comunidad</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="rigth-width">
+        <div class="col-md-6 background-opacity">
+            <h1>Mis Comunidades</h1>
+                <table id="communityTable">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Comunidad</th>
+                        <th>Salir de Comunidad</th>
+                    </tr>
+                    {{#each misComunidades}}
+                        <tr>
+                            <td>{{nombre}}</td>
+                            <td>
+                                <button class="btn btn-primary" onclick="verDetalles('{{id}}')">Ver Detalles</button>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary" onclick="salirComunidad('{{id}}')">Salir</button>
+                            </td>
+                        </tr>
+                    {{/each}}
+                </table>
+            </div>
+        </div>
+    </body>
+
+    <script>
+        function verDetalles(id) {
+            // Redirige a la página de detalles con el ID de la comunidad
+            window.location.href = '/comunidades/' + id;
+        }
+    </script>
+
+
+    <script>
+        function unirmeComunidad(id) {
+            // Redirige a la página de detalles con el ID de la comunidad
+            window.location.href = '/unirmeComunidad/' + id;
+        }
+    </script>
+
+    <script>
+        function salirComunidad(id) {
+            // Redirige a la página de detalles con el ID de la comunidad
+            window.location.href = '/salirComunidad/' + id;
+        }
+    </script>
+
+    <script>
+        function searchTable() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("search");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("communityTable");
+            tr = table.getElementsByTagName("tr");
+
+            for (i = 1; i < tr.length; i++) {
+                tdNombre = tr[i].getElementsByTagName("td")[0]; // Nombre column
+                if (tdNombre) {
+                    txtNombre = tdNombre.textContent || tdNombre.innerText;
+
+                    // Split the name into words and check if any word matches the filter
+                    var words = txtNombre.split(' ');
+                    var matchFound = words.some(word => word.toUpperCase().indexOf(filter) > -1);
+
+                    if (matchFound) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+</html>
+
+
+{{/partial}}
+{{>templates/layout.html}}

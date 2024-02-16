@@ -1,0 +1,39 @@
+{{#partial "titulo"}}Incidente{{/partial}}
+{{#partial "principal"}}
+
+<html>
+<head>
+<meta charset = "UTF-8">
+</head>
+
+    <body>
+        <div class="col-md-6 background-opacity">
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Incidentes</th>
+                </tr>
+
+                <tr>
+                     <td>{{incidente.id}}</td>
+                     <td>{{incidente.observasiones}}</td>
+                    <td>{{incidente.fe}}</td>
+                    <td>
+                        <button onclick="verDetalles('{{comunidad.id}}')">Ver Detalles</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </body>
+
+    <script>
+        function verDetalles(id) {
+            // Redirige a la página de detalles con el ID de la comunidad
+            window.location.href = '/incidentesDeComunidad/' + id;
+        }
+    </script>
+</html>
+
+{{/partial}}
+{{>templates/layout.html}}

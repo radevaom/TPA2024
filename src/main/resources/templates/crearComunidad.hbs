@@ -1,0 +1,29 @@
+{{#partial "titulo"}}Crear Comunidad{{/partial}}
+{{#partial "principal"}}
+
+
+    <body>
+        <div class="col-md-6 background-opacity">
+            <h1>Crear Comunidad</h1>
+            <form method="POST" action="/crearComunidad">
+                <div class="row">
+                    <div class="nombre">
+                        <label style="display:block"> Nombre</label>
+                        <input type="text" name="nombreComunidad"/>
+                    </div>
+                    <br>
+                    <div class="acciones" class="registrarse">
+                        <a href="/">
+                            <input class="btn btn-primary" class="registro medium-width" type='submit' name='registrar' value='Crear comunidad' >
+                        </a>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </body>
+
+
+
+{{/partial}}
+{{>templates/layout.html}}

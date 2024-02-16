@@ -1,0 +1,44 @@
+{{#partial "titulo"}}Listado de Incidentes{{/partial}}
+{{#partial "principal"}}
+
+<html>
+    <head>
+        <meta charset = "UTF-8">
+    </head>
+
+    <body>
+    <div class="col-md-6 background-opacity">
+
+        <h2> Tienes los siguientes incidentes cercanos abiertos para revisar </h2>
+        <table id="incidentTable">
+            <tr>
+                <th>Incidente</th>
+                <th>Servicio</th>
+                <th>Observasiones</th>
+                <th>Estacion</th>
+                <th>Localizacion</th>
+                <th>Latitud</th>
+                <th>Longitud</th>
+            </tr>
+            {{#each incidentesCercanos}}
+                <tr>
+                    <td>{{id}}</td>
+                    <td>{{servicio.nombre}}</td>
+                    <td>{{observaciones}}</td>
+                    <td>{{servicio.estacion.nombre}}</td>
+                    <td>{{servicio.estacion.localizacion.nombre}}</td>
+                    <td>{{servicio.estacion.localizacion.centroide.lat}}</td>
+                    <td>{{servicio.estacion.localizacion.centroide.lon}}</td>
+
+
+                </tr>
+            {{/each}}
+        </table>
+    </div>
+
+    </body>
+</html>
+
+
+{{/partial}}
+{{>templates/layout.html}}

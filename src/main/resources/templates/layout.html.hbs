@@ -1,0 +1,127 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="/stylesheets/layout.css">
+    <script src="https://kit.fontawesome.com/c15aea6831.js" crossorigin="anonymous"></script>
+    <title>
+        {{#block "titulo" }}
+        {{/block}}
+    </title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <p>
+                    <a href="/home">
+                        <img src="/img/home.png" class="imagen_home" alt="icon">
+                    </a>
+                </p>
+                <h3 class="titulo">Sistema de apoyo a comunidades de movilidad reducida</h3>
+            </div>
+
+            {{#if sesionIniciada}}
+            <nav>
+                <ul class="navbar-nav mr-auto">
+<!--                    <li class="nav-item"><a class="nav-link" href="/incidentes" >Listado de Incidentes</a></li>-->
+                    <li class="nav-item"><a class="nav-link" href="/incidentes/nuevo">Alertar incidente nuevo</a></li>
+<!--                    <li class="nav-item"><a class="nav-link" href="/incidentes/cierre">Resolver incidente activo</a></li>-->
+<!--                    <li class="nav-item"><a class="nav-link" href="#" onclick="obtenerUbicacion()" >Quiero ver un incidente</a></li>-->
+<!--                    <li class="nav-item"><a class="nav-link" href="/usuarios">Administrar usuarios</a></li>-->
+                    <li class="nav-item"><a class="nav-link" href="/incidentes/ranking">Ranking de incidentes</a></li>
+            {{#if esAdministrador}}
+                    <li class="nav-item"><a class="nav-link" href="/cargaMasiva">Carga Masiva</a></li>
+            {{/if}}
+                    <li class="nav-item"><a class="nav-link" href="/comunidades">Comunidades</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+                </ul>
+            </nav>
+            {{else}}
+            <nav>
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item"><a class="nav-link" href="/login">Iniciar Sesion</a></li>
+                </ul>
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item"><a class="nav-link" href="/registro">Registrarse</a></li>
+                </ul>
+            </nav>
+            {{/if}}
+
+        </div>
+        <h1 class="tituloReportes">Sistema de apoyo a comunidades de movilidad reducida</h1>
+    </div>
+	<main>
+        {{#block "principal" }}
+        {{/block}}
+	</main>
+
+    <footer>
+        <div class="containerFooter">
+            <div class="nosotros">
+                <div class="parrafo">
+                    <h3>Con nosotros es más fácil moverte</h3>
+                </div>
+            </div>
+
+
+
+            <div class="footerDerecha">
+
+                <p>Diseño de Sistemas &copy; 2023</p>
+
+                <p class="imagenDerecha">
+                    <a href="https://github.com/dds-utn/2023-tpa-mino-grupo-17">
+                        <img src="/img/logo_github.jpeg" class="imagen_footer" alt="icon">
+                    </a>
+                </p>
+            </div>
+
+        </div>
+    </footer>
+</body>
+<script>
+function obtenerUbicacion() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var latitud = position.coords.latitude;
+            var longitud = position.coords.longitude;
+            console.log("Latitud: " + latitud + ", Longitud: " + longitud);
+            // Aquí puedes enviar la ubicación al servidor si lo necesitas
+            var formData = new FormData();
+            formData.append("latitud", latitud);
+            formData.append("longitud", longitud);
+            fetch('/incidentes/sugerenciaRevision', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                              },
+                            body: JSON.stringify({
+                                      lat: latitud,
+                                      lon: longitud
+                                      }),
+                      }).then(response => {
+                      console.log(response);
+                                        if(response.ok) {
+                                        // Manejar la respuesta del servidor si es necesario
+                                                            console.log('Atributo de sesión establecido correctamente.');
+                                                            window.location.replace(response.url);
+                                        }
+                                        else {
+                                        // Manejar errores si la solicitud falla
+                                                            console.error('Error al establecer el atributo de sesión:', error);
+                                        }
+                      }).catch(error => {
+                                      // Manejar errores si la solicitud falla
+                                        console.error('Error al establecer el atributo de sesión:', error);
+                      });
+        });
+
+    } else {
+        console.log("La geolocalización no está soportada por este navegador.");
+    }
+}
+</script>
+
+</html>

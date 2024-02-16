@@ -1,0 +1,117 @@
+{{#partial "titulo"}}Registro{{/partial}}
+{{#partial "principal"}}
+
+<html>
+<head>
+<link rel="stylesheet" href="registro.css">
+</head>
+<body>
+
+    <div class="col-md-6 background-opacity">
+    <h1 class="h1Registro">Registro</h1>
+
+        <form method="POST" action="/registro">
+            <div class="row">
+                <div class="nombre">
+                    <label style="display:block"> Nombre</label>
+                    <input type="text" name="nombre" value="{{valorNombre}}" style="text-align: center" required pattern = "[a-zA-Z]+"
+                        oninvalid="this.setCustomValidity('Por favor ingrese su nombre (solo letras y/o espacios)')"
+                        oninput="this.setCustomValidity('')"/>
+                </div>
+
+                <div class="apellido">
+                    <label style="display:block">Apellido</label>
+                    <input class="col-6 m-2" type="text" name="apellido" value="{{valorApellido}}" style="text-align: center" required pattern = "[a-zA-Z]+"
+                        oninvalid="this.setCustomValidity('Por favor ingrese su apellido (solo letras y/o espacios)')"
+                        oninput="this.setCustomValidity('')"/>
+                </div>
+
+                <div class="">
+                    <label style="display:block">Tipo de Usuario</label>
+                    <select name="tipoUsu" id="tipoUsu">
+                        <option value="Persona">Persona</option>
+                        <option value="Organismo de Control">Organismo de Control</option>
+                        <option value="Entidad Servicios Públicos">Entidad Servicios Públicos</option>
+                    </select>
+                </div>
+
+                <div class="">
+                    <label style="display:block">Correo Electrónico</label>
+                    <input class="col-6 m-2" type="email" name="email" value="{{valorNroDocumento}}"  style="text-align: center" required pattern = "^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$"
+                        oninvalid="this.setCustomValidity('Por favor ingrese su Correo Electrónico')"
+                        oninput="this.setCustomValidity('')"/>
+                </div>
+
+                <div class="username">
+                    <label style="display:block">Nombre de usuario</label>
+                    <input class="col-6 m-2" type="text" name="username" value="{{valorUsername}}" style="text-align: center" minlength = 6 maxlength = 15 required pattern = "[a-zA-Z0-9-_]+"
+                        oninvalid="this.setCustomValidity('Por favor ingrese un nombre de usuario valido (combinacion de letras mayusculas o minusculas, numeros, -, _, entre 6 y 15 caracteres')"
+                        oninput="this.setCustomValidity('')"/>
+                </div>
+
+                <div class="password">
+                    <label style="display:block">Contraseña</label>
+                    <input class="col-6 m-2" type="password" name="password" style="text-align: center" required/>
+                </div>
+
+                <div class="input-persona">
+                    <label style="display:block">Tipo de notificación</label>
+                    <select class="medium-width" name="tipoAlerta" id="tipoAlerta">
+                        <option value="1">Inmediata</option>
+                        <option value="2">Sin apuro</option>
+                    </select>
+                </div>
+
+                <div class="input-persona">
+                    <label style="display:block">Medio de comunicación predeterminado</label>
+                    <select  class="medium-width" name="medioComu" id="medioComu">
+                        <option value="ComunicacionWhatsapp">Por Whatsapp</option>
+                        <option value="ComunicacionMail">Por mail</option>
+                    </select>
+                </div>
+
+                {{#if primeraVez}}
+                <div class="registro">
+                    <h6>Ingrese sus datos</h6>
+                </div>
+                {{else}}
+                <div class="registro">
+                    <h6 style="color: red;">* Contraseña insegura</h6>
+                </div>
+                {{/if}}
+
+
+                    <div class="acciones" class="registrarse">
+                        <a href="/">
+                            <input class="btn btn-primary" class="registro medium-width" type='submit' name='registrar' value='Crear usuario' >
+                        </a>
+                    </div>
+
+            </div>
+        </form>
+    </div>
+
+</body>
+
+<script>
+    document.getElementById('tipoUsu').addEventListener('input', function() {
+        var valorInput = this.value;
+        var divs = document.getElementsByClassName('input-persona');
+
+        for (var i = 0; i < divs.length; i++) {
+            var elemento = divs[i];
+            if (valorInput === 'Persona') {
+                elemento.style.display = 'block';
+
+            }
+            else {
+                elemento.style.display = 'none';
+            }
+        }
+    });
+</script>
+
+</html>
+{{/partial}}
+
+{{>templates/layout.html}}

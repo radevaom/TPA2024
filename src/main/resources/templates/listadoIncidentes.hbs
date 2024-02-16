@@ -1,0 +1,113 @@
+{{#partial "titulo"}}Listado de Incidentes{{/partial}}
+{{#partial "principal"}}
+
+<html>
+    <head>
+        <meta charset = "UTF-8">
+    </head>
+
+    <body>
+    <div class="col-md-6 background-opacity">
+        <label for="search">Search:</label>
+        <input type="text" id="search" oninput="searchTable()" placeholder="Enter keyword">
+        <h3> </h3>
+        <table id="incidentTable">
+            <tr>
+                <th>Fecha</th>
+                <th>Observasiones</th>
+                <th>Servicio</th>
+                <th>Estado</th>
+                <th></th>
+            </tr>
+            {{#each incidentes}}
+                <tr>
+                    <td>{{fecha}}</td>
+                    <td>{{observaciones}}</td>
+                    <td>{{servicio.nombre}}</td>
+                    {{#if cierre}}
+                        <td>Cerrado</td>
+                        <td>
+                            <form id="incidentForm">
+                                <button class="btn btn-success btn-grey">Cerrado</button>
+                            </form>
+                        </td>
+                    {{else}}
+                        <td>Vigente</td>
+
+                        <td>
+                            <form id="incidentForm" method="post" action="/incidentes/{{id}}/cierre">
+                                <button type="submit" class="btn btn-success">Cerrar</button>
+                            </form>
+                        </td>
+                    {{/if}}
+
+
+
+                    <td>
+                        <div class="mensajeTemporal" id="mensaje" style="display: {{#if mensaje}}block{{else}}none{{/if}}">
+                            {{mensaje1}}
+                            <script>
+                                // JavaScript para ocultar el mensaje después de 3 segundos
+                                setTimeout(function() {
+                                  document.getElementById('mensaje').style.display = 'none';
+                                }, 3000);
+                            </script>
+                        </div>
+                    </td>
+
+                </tr>
+            {{/each}}
+        </table>
+    </div>
+
+    <script>
+        function searchTable() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("search");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("incidentTable");
+            tr = table.getElementsByTagName("tr");
+
+            for (i = 1; i < tr.length; i++) {
+                tdFecha = tr[i].getElementsByTagName("td")[0]; // Fecha column
+                tdEstado = tr[i].getElementsByTagName("td")[3]; // Estado column
+                if (tdFecha && tdEstado) {
+                    txtFecha = tdFecha.textContent || tdFecha.innerText;
+                    txtEstado = tdEstado.textContent || tdEstado.innerText;
+
+                    if (txtFecha.toUpperCase().indexOf(filter) > -1 || txtEstado.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+    <script>
+        function sendPatchRequest() {
+            fetch('/incidentes/{{id}}/cierre', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Add any other headers as needed
+                },
+                body: JSON.stringify({
+                    // Add data to be sent in the PATCH request body if needed
+                })
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data); // Handle response data as needed
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+    </body>
+</html>
+
+
+{{/partial}}
+{{>templates/layout.html}}

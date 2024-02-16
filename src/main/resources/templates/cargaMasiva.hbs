@@ -1,0 +1,29 @@
+{{#partial "titulo"}}Carga Masiva{{/partial}}
+{{#partial "principal"}}
+
+
+    <body>
+        <div class="col-md-6 background-opacity">
+            <h1>CSV Loader</h1>
+                <form action="/cargaMasiva" method="post" enctype="multipart/form-data">
+                    <label for="csvFile">Cargar archivo CSV:</label>
+                    <input type="file" name="csvFile" accept=".csv" required>
+                    <br><br>
+                    <button class="btn btn-primary" type="submit">Upload CSV</button>
+                </form>
+            <div class="mensajeTemporal" id="mensaje" style="display: {{#if mensaje}}block{{else}}none{{/if}}">
+                {{mensaje}}
+                <script>
+                    // JavaScript para ocultar el mensaje después de 3 segundos
+                    setTimeout(function() {
+                      document.getElementById('mensaje').style.display = 'none';
+                    }, 3000);
+                </script>
+            </div>
+        </div>
+    </body>
+
+
+
+{{/partial}}
+{{>templates/layout.html}}

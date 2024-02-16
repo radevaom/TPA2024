@@ -1,0 +1,60 @@
+{{#partial "titulo"}}Inicio de Sesion{{/partial}}
+{{#partial "principal"}}
+
+
+    <body>
+    <div class="">
+        <h1 class="tituloReportes">Sistema de apoyo a comunidades de movilidad reducida</h1>
+    </div>
+    <main>
+        <div class="rowflex">
+            <!-- Columna de Iniciar Sesión a la Izquierda -->
+            <div class="col-md-6 background-opacity">
+                <form method="post" action="/login">
+                    <h2 class="h1Registro">Iniciar Sesión</h2>
+
+                    <div class="form-group">
+                        <label for="username">Nombre:</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <br>
+
+                    <div class="form-group">
+                        <label for="password">Contraseña:</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+
+                    <br>
+
+                    <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                </form>
+            </div>
+
+            <!-- Columna de Registrarse a la Derecha -->
+<!--            <div class="col-md-6 background-opacity">-->
+<!--                <form method="post" action="/registrarse">-->
+<!--                    <h2 class="mb-4">Registrarse</h2>-->
+
+<!--                    <div class="form-group">-->
+<!--                        <label for="newUsername">Nuevo Nombre de Usuario:</label>-->
+<!--                        <input type="text" class="form-control" id="newUsername" name="newUsername" required>-->
+<!--                    </div>-->
+
+<!--                    <br>-->
+
+<!--                    <div class="form-group">-->
+<!--                        <label for="newPassword">Nueva Contraseña:</label>-->
+<!--                        <input type="password" class="form-control" id="newPassword" name="newPassword" required>-->
+<!--                    </div>-->
+
+<!--                    <br>-->
+
+<!--                    <button type="submit" class="btn btn-success">Registrarse</button>-->
+<!--                </form>-->
+<!--            </div>-->
+        </div>
+    </main>
+
+    </body>
+{{/partial}}
+{{>templates/layout.html}}
