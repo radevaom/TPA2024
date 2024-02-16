@@ -84,7 +84,7 @@ public class CargaMasivaController extends HandlerTP {
 
       //ctx.redirect("/cargaMasiva?mensaje=Archivo+cargado+correctamente");
 
-      ctx.render("/cargaMasiva.hbs", model);
+      ctx.render("cargaMasiva.hbs", model);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
