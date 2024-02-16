@@ -45,7 +45,7 @@ public class ListaIncidenteController extends HandlerTP {
 
     model.put("incidentes", results);
 
-    ctx.render("/listadoIncidentes.hbs", model);
+    ctx.render("listadoIncidentes.hbs", model);
     entity.close();
 
 //    entity.getTransaction().commit();

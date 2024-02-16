@@ -57,7 +57,7 @@ public class SugerenciaRevisionIncidenteController extends HandlerTP {
     //model.put("incidentes", incidentes);
     model.put("incidentesCercanos", incidentesCercanos);
 
-    ctx.render("/sugerenciaRevisionIncidente.hbs", model);
+    ctx.render("sugerenciaRevisionIncidente.hbs", model);
 
   }
   public void handlePostRequest(Context ctx, Map<String, Object> model) {

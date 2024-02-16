@@ -97,7 +97,7 @@ public class ListaComunidadController extends HandlerTP {
     model.put("comunidades", comunidades);
     model.put("misComunidades", comunidadesFiltradas);
 
-    ctx.render("/listadoComunidades.hbs", model);
+    ctx.render("listadoComunidades.hbs", model);
     entity.close();
     } else {
       // Manejar el caso en el que el usuario no esté autenticado

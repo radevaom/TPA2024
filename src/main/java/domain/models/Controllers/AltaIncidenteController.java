@@ -64,7 +64,7 @@ public class AltaIncidenteController extends HandlerTP {
 
       entity.close();
     }
-    context.render("/aperturaIncidente.hbs", model);
+    context.render("aperturaIncidente.hbs", model);
 
   }
 

@@ -65,7 +65,7 @@ public class CierreIncidenteController extends HandlerTP {
     }
     model.put("mostrarLinkCierre", true);
 
-    context.render("/listadoIncidentes.hbs", model);
+    context.render("listadoIncidentes.hbs", model);
 
   }
 

@@ -74,6 +74,6 @@ public class ListaRankingIncidenteController extends HandlerTP {
 
 
     entity.close();
-    ctx.render("/ranking.hbs", model);
+    ctx.render("ranking.hbs", model);
   }
 }

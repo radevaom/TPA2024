@@ -58,7 +58,7 @@ public class CargaMasivaController extends HandlerTP {
       model.put("mensaje", mensaje);
     }
 
-    context.render("/cargaMasiva.hbs", model);
+    context.render("cargaMasiva.hbs", model);
   }
 
   public void handlePostRequest(Context ctx) {

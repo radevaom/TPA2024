@@ -45,7 +45,7 @@ public class ListaIncidenteControllerDeComunidad extends HandlerTP {
     model.put("todosLosIncidentes", todosLosIncidentes);
     model.put("incidentes", comunidad.getIncidentesReportados());
 
-    ctx.render("/listadoIncidentes.hbs", model);
+    ctx.render("listadoIncidentes.hbs", model);
     entity.close();
 
   }
